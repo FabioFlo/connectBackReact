@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { ProductList } from "./components/ProductList";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 // Simulazione di connessione alla chat del server - Dati
 const connect = () => console.log("Connecting");
 const disconnect = () => console.log("Disconnecting");
+
 interface User {
   id: number;
   name: string;
 }
+
 function App() {
   /*  const ref = useRef<HTMLInputElement>(null);
   // Side Effect - significa che questa riga di codice sta modificando
@@ -58,20 +60,51 @@ function App() {
 
   // Collegamento con il back (Dati esempio)
   const [users, setUsers] = useState<User[]>([]);
+  const [error, setError] = useState("");
+
   useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        // get -> await promise .> res /res
+        const res = await axios.get<User[]>(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        setUsers(res.data);
+      } catch (err) {
+        setError((err as AxiosError).message);
+      }
+    };
+  }, []);
+  return (
+    <>
+      {error && <p className="text-danger">{error}</p>}
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}> {user.name}</li>
+        ))}
+      </ul>
+    </>
+  );
+
+  // In alternativa possiamo fare anche come sotto (più pulito)
+  /*  useEffect(() => {
     axios
       .get<User[]>("https://jsonplaceholder.typicode.com/users")
-      .then((res) => setUsers(res.data));
+      .then((res) => setUsers(res.data))
+      .catch((err) => setError(err.message));
     // Questo axios.get restituisce un 'Promise', si tratta di un oggetto
     // che restituisce il risultato o il fallimento dell'operazione async.
   }, []);
   return (
-    <ul>
-      {users.map((user) => (
-        <li key={user.id}> {user.name}</li>
-      ))}
-    </ul>
-  );
+    <>
+      {error && <p className="text-danger">{error}</p>}
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}> {user.name}</li>
+        ))}
+      </ul>
+    </>
+  ); */
 }
 // ctrl + p per la ricerca
 // plugin: ES7 react permette di velocizzare alcuni processi (rafce per instanziare un componente)
