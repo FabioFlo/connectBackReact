@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-import apiClient, { CanceledError } from "./services/api-client";
+import { CanceledError } from "./services/api-client";
 import userService, { User } from "./services/user-service";
 
 // Simulazione di connessione alla chat del server - Dati
@@ -62,7 +62,7 @@ function App() {
   // GET
   useEffect(() => {
     setLoading(true);
-    const { request, cancel } = userService.getAllUsers();
+    const { request, cancel } = userService.getAll<User>();
     request
       .then((res) => {
         setUsers(res.data);
@@ -81,8 +81,8 @@ function App() {
   const deleteUser = (user: User) => {
     const originalUsers = [...users];
     setUsers(users.filter((u) => u.id !== user.id));
-    apiClient
-      .delete("/users/" + user.id)
+    userService
+      .delete(user.id)
       /*.then()  in questo caso non succede nulla perché è collegato ad un server fantoccio */
       .catch((err) => {
         setError(err.message);
@@ -94,8 +94,8 @@ function App() {
     const originalUsers = [...users];
     const newUser = { id: 0, name: "Flo" };
     setUsers([newUser, ...users]);
-    apiClient
-      .post("/users/", newUser)
+    userService
+      .create(newUser)
       .then(({ data: savedUser }) => setUsers([savedUser, ...users]))
       .catch((err) => {
         setError(err.message);
@@ -111,7 +111,7 @@ function App() {
 
     /* Dipende da come è strutturato il backend, ma se si sta modificando una sola prorpietà
     si può utilizzare il metodo 'patch', altrimenti 'put' */
-    apiClient.patch("/users/" + user.id, updatedUser).catch((err) => {
+    userService.update(updatedUser).catch((err) => {
       setError(err.message);
       setUsers(originalUsers);
     });
