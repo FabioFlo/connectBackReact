@@ -1,6 +1,7 @@
 import { Button, Grid, GridItem, Show } from "@chakra-ui/react";
 import "./App.css";
 import { NavBar } from "./components/NavBar";
+import { GameGrid } from "./components/GameGrid";
 
 // Simulazione di connessione alla chat del server - Dati
 /* const connect = () => console.log("Connecting");
@@ -168,7 +169,9 @@ function App() {
       <Show above="lg">
         <GridItem area={"aside"}>Aside</GridItem>{" "}
       </Show>
-      <GridItem area={"main"}>Main</GridItem>{" "}
+      <GridItem area={"main"}>
+        <GameGrid />
+      </GridItem>{" "}
     </Grid>
   );
 }
