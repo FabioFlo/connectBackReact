@@ -9,6 +9,6 @@ export { CanceledError }; */
 export default axios.create({
   baseURL: "https://api.rawg.io/api",
   params: {
-    key: "96f7eeb3119e47659952196df5829280",
+    key: "e62c0167250a4864a0011080a2a3874d",
   },
 });
