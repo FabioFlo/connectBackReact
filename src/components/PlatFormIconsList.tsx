@@ -1,15 +1,40 @@
+import {
+  FaAndroid,
+  FaApple,
+  FaLinux,
+  FaPlaystation,
+  FaWindows,
+  FaXbox,
+} from "react-icons/fa";
+import { MdPhoneIphone } from "react-icons/md";
+import { SiNintendo } from "react-icons/si";
+import { BsGlobe } from "react-icons/bs";
 import { Platform } from "../hooks/useGames";
-import { Text } from "@chakra-ui/react";
+import { HStack, Icon, Text } from "@chakra-ui/react";
+import { IconType } from "react-icons/lib";
 
 interface Props {
   platforms: Platform[];
 }
-export const PlatFormIconsList = ({ platforms }: Props) => {
+const PlatFormIconsList = ({ platforms = [] }: Props) => {
+  // [key: string]: IconType -> Definiamo un index signature, non importa quale sia il nome delle chiavi e n numero di chiavi
+  const iconMap: { [key: string]: IconType } = {
+    pc: FaWindows,
+    playstation: FaPlaystation,
+    xbox: FaXbox,
+    nintendo: SiNintendo,
+    mac: FaApple,
+    linux: FaLinux,
+    ios: MdPhoneIphone,
+    web: BsGlobe,
+    android: FaAndroid,
+  };
   return (
-    <>
+    <HStack marginY={1}>
       {platforms.map((platform) => (
-        <Text>{platform.name}</Text>
+        <Icon key={platform.id} as={iconMap[platform.slug]} color="gray.500" />
       ))}
-    </>
+    </HStack>
   );
 };
+export default PlatFormIconsList;
